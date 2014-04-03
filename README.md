@@ -1,6 +1,3 @@
-myOwnFirewall
-=============
-
 # myOwnFirewall
 
 Simple bash script to have an automated firewall in linux using IPTABLES.
