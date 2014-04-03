@@ -4,13 +4,13 @@ Simple bash script to have an automated firewall in linux using IPTABLES.
 
 This script is part of an articles saga that you can read in http://rolandocaldas.com (spanish blog)
 
-- First aticle: [Banear IPs en linux automáticamente con IPTABLES](http://rolandocaldas.com/linux/script-para-banear-ips-en-linux-automaticamente)
+- First article: [Banear IPs en linux automáticamente con IPTABLES](http://rolandocaldas.com/linux/script-para-banear-ips-en-linux-automaticamente)
 
 ## Options
 
 ### Script like service
 
-The bash script runs like a service so it's necesary start the script to use it.
+The bash script runs like a service so it's necessary start the script to use it.
 
 To start the service run:
 
@@ -19,9 +19,9 @@ To start the service run:
 /etc/myOwnFirewall/myOwnFirewall start
 ```
 
-### Automatic banned ip list
+### Automatically banned ip list
 
-The script reads a text file and banned all the ips of this file when the script starts
+The script reads a text file and bans all the ips of this file when the script starts
 
 ### Ban a new ip 
 
@@ -41,7 +41,7 @@ you can remove a ip from the banned ip list running the command
 
 ### Stop the firewall
 
-You can stop the firewall (and remove all their rules) running the command
+You can stop the firewall (and remove all their rules) if you run the command
 
 ```bash
 /etc/myOwnFirewall/myOwnFirewall stop
@@ -49,7 +49,7 @@ You can stop the firewall (and remove all their rules) running the command
 
 ### Restart the firewall
 
-You can restart the firewall running the command
+You can restart the firewall if you run the command
 
 ```bash
 /etc/myOwnFirewall/myOwnFirewall restart
