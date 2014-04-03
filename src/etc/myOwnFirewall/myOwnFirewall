@@ -1,0 +1,153 @@
+#!/bin/bash
+
+# myOwnFirewall v0.1		
+#
+# Author: Rolando Caldas	
+# http://rolandocaldas.com	
+# 
+# https://github.com/rolando-caldas/myOwnFirewall
+
+
+BANNED_IPS="/etc/myOwnFirewall/banList.txt"
+LOCK="/etc/myOwnFirewall/.lock"
+TEMP="/etc/myOwnFirewall/banned_tmp.txt"
+
+function banIP {
+	if [ -f ${LOCK} ]
+	then
+		if [ $# -eq 0 ]
+		then
+			echo "You must enter an ip address"
+		else
+			ip=$1
+			exists=false
+			for i in `cat $BANNED_IPS`; do
+				if [ $i = $ip ]
+				then
+					exists=true
+				fi
+			done
+
+			if [ $exists = false ]
+			then
+				echo $ip >> $BANNED_IPS
+				iptables -I INPUT -s $ip -j DROP
+				iptables -I OUTPUT -s $ip -j DROP
+				echo "IP ${ip} banned"
+			else
+				echo "IP ${ip} already in the list"
+			fi
+		fi
+	else
+		echo "myOwnFirewall is not running"
+	fi
+}
+
+function restartScript {
+	stopScript
+	startScript
+}
+
+function showHelp {
+	echo "Usage: myOwnFirewall {start|stop|restart}"
+}
+
+function startScript {
+
+	if [ -f ${LOCK} ]
+	then
+		echo "myOwnFirewall is already running"
+		exit
+	else
+	 	` > ${LOCK}` 
+	
+		for i in `cat $BANNED_IPS`; do
+			iptables -I INPUT -s $i -j DROP
+			iptables -I OUTPUT -s $i -j DROP
+		done
+		
+		echo "myOwnFirewall started"
+	fi
+}
+
+function stopScript {
+	if [ -f ${LOCK} ]
+	then
+		for i in `cat $BANNED_IPS`; do
+			iptables -D INPUT -s $i -j DROP
+			iptables -D OUTPUT -s $i -j DROP
+		done
+		rm ${LOCK}
+		
+		echo "myOwnFirewall stopped"
+	else
+		echo "myOwnFirewall is not running"
+	fi
+}
+
+function unbanIP {
+	if [ -f ${LOCK} ]
+	then
+		if [ $# -eq 0 ]
+		then
+			echo "You must enter an ip address"
+		else
+			ip=$1
+			exists=false
+
+			for i in `cat $BANNED_IPS`; do
+				if [ $i = $ip ]
+				then
+					exists=true
+				else
+					echo $i >> $TEMP
+				fi
+			done
+
+			if [ $exists = false ]
+			then
+				echo "IP ${ip} doesn't in the list"
+			else
+				cp $TEMP $BANNED_IPS && rm $TEMP
+				iptables -D INPUT -s $ip -j DROP
+				iptables -D OUTPUT -s $ip -j DROP
+				echo "IP ${ip} unbanned"
+			fi
+		fi
+	else
+		echo "myOwnFirewall is not running"
+	fi
+}
+
+case "$1" in
+
+	ban)
+		banIP $2
+		exit
+		;;
+
+	restart)
+		restartScript
+		exit
+		;;
+
+	start)
+		startScript
+		exit
+		;;
+
+	stop)
+		stopScript
+		exit
+		;;
+
+	unban)
+		unbanIP $2
+		exit
+		;;
+
+	*)
+		showHelp
+		exit
+		;;
+esac
