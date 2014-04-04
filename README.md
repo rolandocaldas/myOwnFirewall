@@ -4,7 +4,7 @@ Simple bash script to have an automated firewall in linux using IPTABLES.
 
 This script is part of an articles saga that you can read in http://rolandocaldas.com (spanish blog)
 
-- First article: [Banear IPs en linux automáticamente con IPTABLES](http://rolandocaldas.com/linux/script-para-banear-ips-en-linux-automaticamente)
+- First article: [Banear IPs en linux automáticamente con IPTABLES](http://rolandocaldas.com/linux/script-banear-ips-en-linux-iptables)
 
 ## Options
 
